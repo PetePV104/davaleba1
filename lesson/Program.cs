@@ -1,18 +1,61 @@
-﻿
-using System;
+﻿using System;
+using System.Collections.Generic;
 
-class Program
+static class MyExtensions
 {
-    static void Main()
+    public static IEnumerable<T> CustomWhere<T>(
+        this IEnumerable<T> collection, Predicate<T> predicate)
     {
-        int[] numbers = { 10, 20, 30, 40 };
+        foreach (var item in collection)
+        {
+            if (predicate(item))
+                yield return item;
+        }
+    }
 
-        ArrayHelper.PrintReverse(numbers);
+    public static T? CustomFirstOrDefault<T>(
+        this IEnumerable<T> collection, Predicate<T> predicate)
+    {
+        foreach (var item in collection)
+        {
+            if (predicate(item))
+                return item;
+        }
+        return default;
+    }
 
-        Console.WriteLine(ArrayHelper.GetFirstElement(numbers));
-        Console.WriteLine(ArrayHelper.GetLastElement(numbers));
-        Console.WriteLine(ArrayHelper.ContainsElement(numbers, 30));
-        Console.WriteLine(ArrayHelper.CountElements(numbers));
-        Console.WriteLine(ArrayHelper.FindIndex(numbers, 30));
+    public static bool CustomAny<T>(
+        this IEnumerable<T> collection, Predicate<T> predicate)
+    {
+        foreach (var item in collection)
+        {
+            if (predicate(item))
+                return true;
+        }
+        return false;
+    }
+
+    public static bool CustomAll<T>(
+        this IEnumerable<T> collection, Predicate<T> predicate)
+    {
+        foreach (var item in collection)
+        {
+            if (!predicate(item))
+                return false;
+        }
+        return true;
+    }
+
+    public static int CustomCount<T>(
+        this IEnumerable<T> collection, Predicate<T> predicate)
+    {
+        int count = 0;
+
+        foreach (var item in collection)
+        {
+            if (predicate(item))
+                count++;
+        }
+        return count;
     }
 }
